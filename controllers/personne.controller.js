@@ -26,11 +26,7 @@ const personneSchema = yup.object().shape({
         .positive()
 })
 
-const personnes = [
-    { id: 1, nom: "Wick", prenom: "John", age: 45 },
-    { id: 2, nom: "Dalton", prenom: "Jack", age: 55 },
-    { id: 3, nom: "Maggio", prenom: "Sophie", age: 33 },
-]
+
 
 
 const showPersonnes = (req, res, next) => {
@@ -69,7 +65,7 @@ const addPerson = (req, res, next) => {
         .catch(err => {
             res.render('personnes', {
                 erreurs: err.errors,
-                personnes
+                personnes: resultat
             })
         })
 
@@ -80,12 +76,14 @@ const deleteUser = (req, res, next) => {
 
 
     const id = req.params.id
-    const index = personnes.findIndex(p => p.id == id)
     
-    if (index != -1) {
-        const DELETE = `DELETE FROM personnes WHERE id = "${index}"`
+    
+    if (id != -1) {
+        const DELETE = `DELETE FROM personnes WHERE id = ${id}`
         const query = connection.query(DELETE, (error, resultat) => {
             console.log(query.sql);
+            console.log(resultat);
+            
             console.log(error);
         })
     } else {
