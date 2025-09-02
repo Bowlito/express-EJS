@@ -1,11 +1,16 @@
 import express from 'express';
 import 'dotenv/config';
+import { setLocale } from 'yup';
+import { fr } from 'yup-locales';
+import session from 'express-session';
 import personne from './routes/personne.route.js';
 import adresse from './routes/adresse.route.js';
-import session from 'express-session';
+
 
 
 const app = express();
+
+
 
 //Configurer la session
 
@@ -17,6 +22,12 @@ app.use(session({
 
 //Utiliser le Middleware body-parser
 app.use(express.urlencoded())
+
+//Configurer les ressources statiques
+app.use(express.static('public'))
+
+//configurer yup
+setLocale(fr)
 
 //Mapping entre routes et le routeur
 app.use("/personnes", personne)
@@ -34,7 +45,7 @@ app.get(['/', '/home', '/accueil'], (req, res) => {
             nomImportant: '<strong>Mitroglou</strong>',
             firstname: req.session.firstname,
             estConnecte: false,
-            nombres: [2,3,8,5, 1]
+            nombres: [2, 3, 8, 5, 1]
         }
     )
 })

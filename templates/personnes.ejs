@@ -9,7 +9,18 @@
 
 <body>
   <h1>Formulaire</h1>
+  
+  <ul>
+    <? if (erreurs) { ?>
+      
+      <? erreurs.forEach(err => { ?>
+        <li>
+          <?= err ?>
+        </li>
+     <? }); ?>
 
+   <? } ?>
+  </ul>
   <h2>Ajouter une nouvelle personne</h2>
   <form action="" method="post">
     <div>

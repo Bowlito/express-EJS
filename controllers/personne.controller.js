@@ -1,3 +1,25 @@
+import yup from 'yup'
+import { setLocale } from 'yup';
+import { fr } from 'yup-locales';
+
+setLocale(fr)
+const personneSchema = yup.object().shape({
+    nom: yup
+        .string()
+        .required()
+        .matches(/^[A-Z]{1}.{2,19}$/, "Le nom doit commencer par une majuscule et comporter entre 3 et 20 lettres"),
+
+    prenom: yup
+        .string()
+        .min(3, (args) =>  `Le prénom doit contenir au moins ${args.min} caractères`)
+        .max(20),
+
+    age: yup
+        .number()
+        .required()
+        .positive()
+})
+
 const personnes = [
     { id: 1, nom: "Wick", prenom: "John", age: 45 },
     { id: 2, nom: "Dalton", prenom: "Jack", age: 55 },
@@ -7,18 +29,32 @@ const personnes = [
 
 const showPersonnes = (req, res, next) => {
     //res.end("<p>Liste des personnes</p>")
-    res.render('personnes', { personnes })
+        res.render('personnes', {
+        personnes,
+        erreurs: null
+    })
 
 
 }
 
-const addPerson = (req, res, next) => {
+const addPerson = (req, res, next) => {    
 
-    personnes.push(req.body)
-    req.session.firstname = req.body.prenom
-    res.redirect('/personnes')
-
-    // res.render('personnes',{personnes})  
+    
+    personneSchema
+    
+        .validate(req.body, { abortEarly: false })
+        .then(() => {
+            personnes.push(req.body)
+            req.session.firstname = req.body.prenom
+            res.redirect('/personnes')
+        })
+        .catch(err =>{
+            res.render('personnes', {
+                erreurs: err.errors,
+                personnes
+            })
+        })       
+    
 
 }
 
