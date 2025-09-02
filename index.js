@@ -5,10 +5,12 @@ import adresse from './routes/adresse.route.js';
 
 const app = express();
 
-//Mapping entre routes et le routeur
+//Utiliser le Middleware body-parser
+app.use(express.urlencoded())
 
+//Mapping entre routes et le routeur
 app.use("/personnes", personne)
-// app.use("/adresse", adresse)
+app.use("/adresse", adresse)
 
 //Config du moteur de template
 app.set('view engine', 'ejs')

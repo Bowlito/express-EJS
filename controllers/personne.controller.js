@@ -4,7 +4,10 @@ const showPersonnes = (req, res, next) => {
 }
 
 const addPerson = (req, res, next) => {
-    res.end("Formulaire reçu")
+    const { nom, prenom, age } = req.body
+    res.end(`Bonjour ${prenom} ${nom}, vous avez ${age} ans.`)
+    console.log(req.body);
+    
 }
 
 
