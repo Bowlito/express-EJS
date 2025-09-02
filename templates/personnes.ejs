@@ -1,23 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personnes</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personnes</title>
 </head>
+
 <body>
-    <h1>Formulaire</h1>
-    <form action="" method="post">
-        <label for="Nom">Nom</label>
-        <input type="text" name="nom" id="nom">
+  <h1>Formulaire</h1>
 
-        <label for="Nom">Prenom</label>
-        <input type="text" name="prenom" id="prenom">
+  <h2>Ajouter une nouvelle personne</h2>
+  <form action="" method="post">
+    <div>
+      <label for="Nom">Nom</label>
+      <input type="text" name="nom" id="nom">
+    </div>
+    <div>
+      <label for="Nom">Prenom</label>
+      <input type="text" name="prenom" id="prenom">
+    </div>
+    <div>
+      <label for="Nom">Age</label>
+      <input type="text" name="age" id="age">
+    </div>
+    <button>Ajouter</button>
+  </form>
+  <h3>Liste des personnes</h3>
+  <div>
+    <? personnes.forEach(p => { ?>
+    <li>
+      <?= p.id ?> - <?= p.nom ?> - <?= p.prenom ?> - <?= p.age ?> <a href="/personnes/<?= p.id ?>">Supprimer</a>
+    </li>
+    <? }); ?>
+  </div>
 
-        <label for="Nom">Age</label>
-        <input type="text" name="age" id="age">
 
-        <button>Ajouter</button>
-    </form>
 </body>
+
 </html>

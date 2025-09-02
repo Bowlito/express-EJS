@@ -5,6 +5,7 @@ const routeur = express.Router()
 
 //Mapping entre route et controller
 routeur.get('/', PersonneController.showPersonnes)
+routeur.get('/:id', PersonneController.deleteUser)
 
 routeur.post('/', PersonneController.addPerson)
 

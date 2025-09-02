@@ -2,8 +2,18 @@ import express from 'express';
 import 'dotenv/config';
 import personne from './routes/personne.route.js';
 import adresse from './routes/adresse.route.js';
+import session from 'express-session';
+
 
 const app = express();
+
+//Configurer la session
+
+app.use(session({
+    secret: 'express-ejs',
+    resave: false,
+    saveUninitialized: false
+}))
 
 //Utiliser le Middleware body-parser
 app.use(express.urlencoded())
@@ -22,6 +32,7 @@ app.get(['/', '/home', '/accueil'], (req, res) => {
         {
             nom: 'Wick',
             nomImportant: '<strong>Mitroglou</strong>',
+            firstname: req.session.firstname,
             estConnecte: false,
             nombres: [2,3,8,5, 1]
         }
