@@ -1,16 +1,11 @@
-import express, { Router } from 'express';
-
+import express from 'express';
+import PersonneController from '../controllers/personne.controller.js';
 //Ici, on gère les routes relatives aux personnes
 const routeur = express.Router()
 
-routeur.get('/', (req, res) => {
-    console.log("Personne");
-    
-    res.end("Page Personne")
-})
+//Mapping entre route et controller
+routeur.get('/', PersonneController.showPersonnes)
 
-routeur.post('/', (req, res) => {
-
-})
+routeur.post('/', PersonneController.addPerson)
 
 export default routeur
