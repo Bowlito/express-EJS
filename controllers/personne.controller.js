@@ -27,21 +27,23 @@ const personneSchema = yup.object().shape({
 
 
 
-const showPersonnes = (req, res, next) => {
+const showPersonnes = async (req, res, next) => {
 
     const SELECT = 'SELECT * FROM personnes'
-    const query = connection.query(SELECT, (error, resultat) => {
-        console.log(query.sql);
-        console.log(resultat);
+    try {
+        const resultat = await connection.query(SELECT)
 
+        res.render('personnes', {
+            personnes: resultat[0],
+            erreurs: null
+        })
+    } catch (error) {
+        res.render('personnes', {
+            personnes: [],
+            erreurs: "Problème de récup des données"
+        })
+    }
 
-        if (resultat) {
-            res.render('personnes', {
-                personnes: resultat,
-                erreurs: null
-            })
-        }
-    })
 }
 
 const addPerson = (req, res, next) => {
@@ -50,26 +52,30 @@ const addPerson = (req, res, next) => {
     personneSchema
 
         .validate(req.body, { abortEarly: false })
-        .then(() => {
+        .then(async () => {
             const INSERT = `INSERT INTO personnes VALUES (NULL, "${req.body.nom}", "${req.body.prenom}", "${req.body.age}")`
-            const query = connection.query(INSERT, (error, resultat) => {
-                console.log(query.sql);
-                console.log(error);
-            })
-            req.session.firstname = req.body.prenom
-            res.redirect('/personnes')
+            try {
+                await connection.query(INSERT)
+                res.redirect('/personnes')
+            } catch (error) {
+                res.render('personnes', {
+                    personnes: [],
+                    erreurs: "Problème d'insertion"
+                })
+            }
+
         })
         .catch(err => {
             res.render('personnes', {
                 erreurs: err.errors,
-                showPersonnes
+                personnes: []
             })
         })
 
 
 }
 
-const deleteUser = (req, res, next) => {
+const deleteUser = async (req, res, next) => {
 
 
     const id = req.params.id
@@ -77,20 +83,18 @@ const deleteUser = (req, res, next) => {
 
     if (id != -1) {
         const DELETE = `DELETE FROM personnes WHERE id = ${id}`
-        const query = connection.query(DELETE, (error, resultat) => {
-            console.log(query.sql);
-            console.log(resultat);
+        try {
+            await connection.query(DELETE)
+            res.redirect('/personnes')
+        } catch (error) {
+            res.render('personnes', {
+                personnes: [],
+                erreurs: "Problème de supression"
+            })
+        }
 
-            console.log(error);
-        })
-    } else {
-        alert('Suppression impossible')
     }
-
-
-    res.redirect('/personnes')
 }
-
 export default { showPersonnes, addPerson, deleteUser }
 
 
@@ -128,66 +132,63 @@ const personneSchema = yup.object().shape({
 //     { id: 3, nom: "Maggio", prenom: "Sophie", age: 33 },
 // ]
 
-const showPersonnes = (req, res, next) => {
+const showPersonnes = async (req, res, next) => {
     const SELECT = "SELECT * FROM personnes"
-    const query = connection.query(SELECT, (error, resultat) => {
-        console.log(query.sql);
-        if (resultat) {
-            res.render('personne', {
-                personnes: resultat,
-                erreurs: null
-            })
-        }
-    })
+    try {
+        const resultat = await connection.query(SELECT)
+        res.render('personne', {
+            personnes: resultat[0],
+            erreurs: null
+        })
+
+    } catch (error) {
+        res.render('personne', {
+            personnes: [],
+            erreurs: "Problème de récupération de données"
+        })
+
+    }
 }
 const addPersonne = (req, res, next) => {
 
     personneSchema
         .validate(req.body, { abortEarly: false })
-        .then(() => {
+        .then(async () => {
             req.session.firstname = req.body.prenom
             const INSERT = "INSERT INTO personnes values (null, ?, ?, ?)"
-            const query = connection.query(INSERT, [req.body.nom, req.body.prenom, req.body.age], (error, resultat) => {
-                console.log(query.sql);
-                if (resultat.affectedRows == 0) {
-
-                    // res.render('personne', {
-                    //     personnes: resultat,
-                    //     erreurs: null
-                    // })
-                }
-            })
+            try {
+                await connection.query(INSERT, [req.body.nom, req.body.prenom, req.body.age])
+            } catch (error) {
+                res.render('personne', {
+                    erreurs: error,
+                    personnes: [] // à refaire après l'ajout de PersonneRepository
+                })
+            }
             res.redirect('/personne')
         })
         .catch(err => {
             console.log(err);
-
             res.render('personne', {
                 erreurs: err.errors,
-                personnes
+                personnes: [] // à refaire après l'ajout de PersonneRepository
             })
         })
 
 
 
 }
-const deletePersonne = (req, res, next) => {
+const deletePersonne = async (req, res, next) => {
     const id = req.params.id
     const DELETE = "DELETE FROM personnes WHERE id=?"
-    const query = connection.query(DELETE, id, (error, resultat) => {
-        console.log(query.sql);
-        console.log(resultat);
-
-        if (resultat.affectedRows == 0) {
-
-            // res.render('personne', {
-            //     personnes: resultat,
-            //     erreurs: null
-            // })
-        }
-    })
-
-    res.redirect('/personne')
+    try {
+        await connection.query(DELETE, id);
+        res.redirect('/personne')
+    } catch (error) {
+        res.render('personne', {
+            erreurs: ['Problème de suppression de données'],
+            personnes: [] // à refaire après l'ajout de PersonneRepository
+        })
+    }
 
 }
 
