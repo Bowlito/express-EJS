@@ -1,9 +1,7 @@
-import * as yup from 'yup'
-import { fr } from 'yup-locales'
-import connection from '../config/db.js'
+import yup from '../config/yup.config.js'
 import personneRepository from '../repositories/personnes.repository.js'
 
-yup.setLocale(fr)
+
 
 
 
@@ -40,7 +38,7 @@ const show = async (req, res, next) => {
 
     }
 }
-const add = (req, res, next) => {
+const add = async (req, res, next) => {
 
     personneSchema
         .validate(req.body, { abortEarly: false })
@@ -59,17 +57,19 @@ const add = (req, res, next) => {
 
             }
         })
-        .catch(err => {
+        .catch(async err => {
             console.log(err);
+            const personnes = await personneRepository.findAll()
             res.render('personnes', {
                 erreurs: err.errors,
-                personnes: [] // à refaire après l'ajout de PersonneRepository
+                personnes
             })
         })
 
 
 
 }
+
 const remove =  async (req, res, next) => {
     const id = req.params.id
     await personneRepository.erase(id)

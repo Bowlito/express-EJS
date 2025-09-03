@@ -1,5 +1,5 @@
 import { id } from 'yup-locales'
-import connection from '../config/db.js'
+import connection from '../config/db.config.js'
 
 const findAll = async () => {
     const SELECT = "SELECT * FROM personnes"
