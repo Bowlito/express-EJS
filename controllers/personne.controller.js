@@ -25,7 +25,7 @@ const personneSchema = yup.object().shape({
 
 
 
-const showPersonnes = async (req, res, next) => {
+const show = async (req, res, next) => {
     const personnes = await personneRepository.findAll()
     if (personnes) {
         res.render('personnes', {
@@ -40,7 +40,7 @@ const showPersonnes = async (req, res, next) => {
 
     }
 }
-const addPersonne = (req, res, next) => {
+const add = (req, res, next) => {
 
     personneSchema
         .validate(req.body, { abortEarly: false })
@@ -70,7 +70,7 @@ const addPersonne = (req, res, next) => {
 
 
 }
-const deletePersonne =  async (req, res, next) => {
+const remove =  async (req, res, next) => {
     const id = req.params.id
     await personneRepository.erase(id)
     res.redirect('/personnes')
@@ -81,4 +81,4 @@ const deletePersonne =  async (req, res, next) => {
 
 //const updatePersonne = async (req, res, next) => {}
 
-export default { showPersonnes, addPersonne, deletePersonne }
+export default { show, add, remove }

@@ -4,9 +4,9 @@ import PersonneController from '../controllers/personne.controller.js';
 const routeur = express.Router()
 
 //Mapping entre route et controller
-routeur.get('/', PersonneController.showPersonnes)
-routeur.get('/:id', PersonneController.deletePersonne)
+routeur.get('/', PersonneController.show)
+routeur.get('/:id', PersonneController.remove)
 
-routeur.post('/', PersonneController.addPersonne)
+routeur.post('/', PersonneController.add)
 
 export default routeur
