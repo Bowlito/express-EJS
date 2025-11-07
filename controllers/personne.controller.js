@@ -5,21 +5,7 @@ import personneRepository from '../repositories/personnes.repository.js'
 
 
 
-const personneSchema = yup.object().shape({
-    nom: yup
-        .string()
-        .required()
-        .matches(/^[A-Z]{1}.{2,19}$/, "Le nom doit commencer par une majuscule et comporter entre 3 et 20 lettres"),
-    prenom: yup
-        .string()
-        .min(3, (args) => `Le prénom doit contenir au moins ${args.min} caractères, valeur saisie : ${args.value} `)
-        .max(20),
-    age: yup
-        .number()
-        .required()
-        .positive()
-
-})
+import filmRepository from "../repositories/films.repository.js"
 
 
 

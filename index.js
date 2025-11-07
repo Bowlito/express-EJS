@@ -56,7 +56,7 @@ app.all('/*splat', (req, res) => {
     res
         .status(404)
         .end("Page introuvable")
-})
+})  
 
 const PORT = process.env.PORT || 5555;
 

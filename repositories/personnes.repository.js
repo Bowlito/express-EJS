@@ -12,6 +12,7 @@ const findAll = async () => {
         return null
     }
 }
+
 const save = async (personne) => {
     const INSERT = "INSERT INTO personnes values (null, ?, ?, ?)"
     try {
